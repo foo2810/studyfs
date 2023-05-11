@@ -12,7 +12,7 @@ Caution!!
 
 I cannot be held responsible for anything that happens.
 
-Try it on a "play system" (e.g. Linux on a virtual machine).
+Try it on a "toy system" (e.g. Linux on a virtual machine).
 
 Compile and Install
 -------------------
