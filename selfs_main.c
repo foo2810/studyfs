@@ -23,6 +23,7 @@ MODULE_PARM_DESC(selfs_param, "selfs parameter");
 
 extern struct super_operations selfs_super_ops;
 extern int selfs_hoge_dir_init(struct super_block *, struct dentry *);
+extern int selfs_piyo_file_init(struct super_block *, struct dentry *);
 
 
 
@@ -87,6 +88,7 @@ static int selfs_fill_super(struct super_block *sb, struct fs_context *fc)
 
     // children of root
     selfs_hoge_dir_init(sb, root);
+    selfs_piyo_file_init(sb, root);
     pr_debug("created children\n");
 
     // set root dentry ?

@@ -1,9 +1,10 @@
 obj-m += selfs.o
-selfs-objs := selfs_main.o selfs_super.o selfs_hoge_dir.o
+selfs-objs := selfs_main.o selfs_super.o selfs_hoge_dir.o selfs_piyo_file.o
 
 CFLAGS_selfs_main.o := -DDEBUG
 CFLAGS_selfs_super.o := -DDEBUG
 CFLAGS_selfs_hoge_dir.o := -DDEBUG
+CFLAGS_selfs_piyo_file.o := -DDEBUG
 
 PWD := $(CURDIR)
 
