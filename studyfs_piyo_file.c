@@ -146,7 +146,7 @@ static void make_piyo_file_inode(struct inode *inode)
 int studyfs_piyo_file_init(struct super_block *sb, struct dentry *root)
 {
     struct inode *child_inode;
-	struct dentry *child_dentry;
+    struct dentry *child_dentry;
 
     child_dentry = d_alloc_name(root, "piyo_file");
     if (!child_dentry)

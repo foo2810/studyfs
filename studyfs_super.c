@@ -31,7 +31,7 @@ const struct super_operations studyfs_super_ops = {
     //.show_path
     //.show_stats
 
-	//.bdev_try_to_free_page
+    //.bdev_try_to_free_page
     //.nr_cached_objects
     //.free_cached_objects
 };

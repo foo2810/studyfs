@@ -52,38 +52,38 @@ static void studyfs_free_fc(struct fs_context *fc)
 static int studyfs_fill_super(struct super_block *sb, struct fs_context *fc)
 {
     struct inode *inode;
-	struct dentry *root;
+    struct dentry *root;
 
 
     // configure super_block (filesystem-specific parts)
     sb->s_blocksize = PAGE_SIZE;
-	sb->s_blocksize_bits = PAGE_SHIFT;
-	sb->s_magic = SELFS_MAGIC;
-	sb->s_op = &studyfs_super_ops;
-	sb->s_time_gran = 1;
+    sb->s_blocksize_bits = PAGE_SHIFT;
+    sb->s_magic = SELFS_MAGIC;
+    sb->s_op = &studyfs_super_ops;
+    sb->s_time_gran = 1;
     pr_debug("configured super_block\n");
 
 
     // create root inode and root dentry
-	inode = new_inode(sb);
-	if (!inode)
-		return -ENOMEM;
+    inode = new_inode(sb);
+    if (!inode)
+        return -ENOMEM;
 
-	inode->i_ino = 1;           // inode number
-	inode->i_mode = 
+    inode->i_ino = 1;           // inode number
+    inode->i_mode = 
         S_IFDIR |               // file type: directory
         S_IRWXU |               // u+rwx
         S_IRGRP | S_IXGRP |     // g+rx
         S_IROTH | S_IXOTH;      // o+rx
-	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-	//inode->i_op = &simple_dir_inode_operations;
-	//inode->i_fop = &simple_dir_operations;
+    inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
+    //inode->i_op = &simple_dir_inode_operations;
+    //inode->i_fop = &simple_dir_operations;
     inode->i_op = &root_dir_inode_ops;
     inode->i_fop = &root_dir_file_ops;
-	set_nlink(inode, 2);    // set number of hard links (that of empty dir is 2. self and ".")
-	root = d_make_root(inode);
-	if (!root)
-		return -ENOMEM;
+    set_nlink(inode, 2);    // set number of hard links (that of empty dir is 2. self and ".")
+    root = d_make_root(inode);
+    if (!root)
+        return -ENOMEM;
     pr_debug("created root directory\n");
 
     // children of root
