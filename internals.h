@@ -1,3 +1,3 @@
 
-#define pr_fmt(fmt) "selfs: " fmt
+#define pr_fmt(fmt) "studyfs: " fmt
 

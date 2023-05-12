@@ -21,10 +21,10 @@ The filesystem is implemented as a kernel module.
 ```
 # make
 
-# insmod selfs.ko
+# insmod studyfs.ko
 
 # mkdir mnt
-# mount -t selfs none mnt
+# mount -t studyfs none mnt
 ```
 
 Example

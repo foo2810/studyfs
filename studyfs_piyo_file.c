@@ -143,7 +143,7 @@ static void make_piyo_file_inode(struct inode *inode)
     inode->i_fop = &piyo_file_file_ops;
 }
 
-int selfs_piyo_file_init(struct super_block *sb, struct dentry *root)
+int studyfs_piyo_file_init(struct super_block *sb, struct dentry *root)
 {
     struct inode *child_inode;
 	struct dentry *child_dentry;

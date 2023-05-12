@@ -80,7 +80,7 @@ static void make_hoge_dir_inode(struct inode *inode)
 }
 
 
-int selfs_hoge_dir_init(struct super_block *sb, struct dentry *root)
+int studyfs_hoge_dir_init(struct super_block *sb, struct dentry *root)
 {
     struct inode *child_inode;
 	struct dentry *child_dentry;

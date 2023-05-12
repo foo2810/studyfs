@@ -8,7 +8,7 @@
 MODULE_LICENSE("GPL");
 
 
-const struct super_operations selfs_super_ops = {
+const struct super_operations studyfs_super_ops = {
     //.alloc_inode
     //.destroy_inode
 
