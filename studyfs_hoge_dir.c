@@ -40,22 +40,22 @@ static const struct inode_operations empty_dir_inode_operations = {
     .listxattr = hoge_dir_listxattr,
 };
 
-static loff_t empty_dir_llseek(struct file *file, loff_t offset, int whence)
+static loff_t hoge_dir_llseek(struct file *file, loff_t offset, int whence)
 {
     /* An empty directory has two entries . and .. at offsets 0 and 1 */
     return generic_file_llseek_size(file, offset, whence, 2, 2);
 }
 
-static int empty_dir_readdir(struct file *file, struct dir_context *ctx)
+static int hoge_dir_readdir(struct file *file, struct dir_context *ctx)
 {
     dir_emit_dots(file, ctx);
     return 0;
 }
 
 static const struct file_operations empty_dir_operations = {
-    .llseek        = empty_dir_llseek,
+    .llseek        = hoge_dir_llseek,
     .read        = generic_read_dir,
-    .iterate_shared    = empty_dir_readdir,
+    .iterate_shared    = hoge_dir_readdir,
     .fsync        = noop_fsync,
 };
 
