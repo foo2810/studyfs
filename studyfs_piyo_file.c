@@ -10,6 +10,11 @@
 MODULE_LICENSE("GPL");
 
 
+#define PIYO_FILE_DATA_SIZE 32
+#define DEFAULT_PIYO_FILE_DATA "Hello, World!\n"
+static char piyo_file_data[PIYO_FILE_DATA_SIZE] = DEFAULT_PIYO_FILE_DATA;
+
+
 static const struct file_operations piyo_file_file_ops;
 
 static int piyo_file_permission(struct inode *inode, int mask)
@@ -43,6 +48,7 @@ static ssize_t piyo_file_listxattr(struct dentry *dentry, char *list, size_t siz
 
 static const struct inode_operations piyo_file_inode_ops = {
     //.default_file_ops = &piyo_file_file_ops;  // not necessary??
+    //.create = ...,
     .link = NULL,          // hard link not supported
     .unlink = NULL,        // ???
     .symlink = NULL,       // sym link not supported
@@ -72,12 +78,11 @@ static loff_t piyo_file_llseek(struct file *file, loff_t offset, int whence)
 static ssize_t piyo_file_read(struct file *file, char __user *buf, 
     size_t size, loff_t *ppos)
 {
-    const char *data = "Hello, World!\n";
-    const size_t len_data = 14;
+    char *data = piyo_file_data;
+    size_t len_data;
     size_t read_size;
 
-    // Need error check?
-    //strncpy(buf, data, 32);
+    len_data = strlen(data);
 
     pr_debug("read: size=%ld, ppos=%lld\n", size, *ppos);
 
@@ -94,14 +99,44 @@ static ssize_t piyo_file_read(struct file *file, char __user *buf,
 
     if (copy_to_user(buf, data + *ppos, read_size))
         return -EFAULT;
+
     *ppos += read_size;
     return read_size;
 }
 
-//static ssize_t piyo_file_write(struct file *file, char __user *buf, 
-//    size_t size, loff_t *ppos)
-//{
-//}
+static ssize_t piyo_file_write(struct file *file, const char __user *buf, 
+    size_t size, loff_t *ppos)
+{
+    size_t len_buf, write_size;
+
+    if (*ppos != 0)
+        return -EINVAL;
+    if (size >= PIYO_FILE_DATA_SIZE)
+        return -EINVAL;
+
+    //len_buf = strlen(buf);    // panic with this code
+    len_buf = strnlen_user(buf, PIYO_FILE_DATA_SIZE);
+    
+    pr_debug("write: size=%ld, ppos=%lld\n", size, *ppos);
+
+    if (size >= len_buf) {
+        write_size = len_buf;
+    } else {
+        write_size = size;
+    }
+
+    pr_debug("write: write_size=%ld\n", write_size);
+    memset(piyo_file_data, 0, PIYO_FILE_DATA_SIZE);
+    if (copy_from_user(piyo_file_data, buf, write_size)) {
+        strcpy(piyo_file_data, DEFAULT_PIYO_FILE_DATA);
+        return -EFAULT;
+    }
+
+    pr_debug("write: written data = %s", piyo_file_data);
+
+    *ppos += write_size;
+    return write_size;
+}
 
 static int piyo_file_open(struct inode *inode, struct file *file)
 {
@@ -118,7 +153,7 @@ static int piyo_file_release(struct inode *inode, struct file *file)
 static const struct file_operations piyo_file_file_ops = {
     .llseek = piyo_file_llseek, 
     .read = piyo_file_read,
-    //.write = piyo_file_write,
+    .write = piyo_file_write,
     .open = piyo_file_open,
     .release = piyo_file_release,
     .fsync = noop_fsync,
