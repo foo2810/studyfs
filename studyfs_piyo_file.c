@@ -25,7 +25,16 @@ static int piyo_file_permission(struct inode *inode, int mask)
 
 static int piyo_file_setattr(struct dentry *dentry, struct iattr *attr)
 {
-    return -EPERM;
+    /*
+    pr_debug("setattr: called\n");
+    pr_debug("ia_valid=%x, "
+             "ia_mode=%o, ia_uid=0x%x, ia_gid=0x%x, "
+             "ia_size=%lld, "
+             "ia_atime=%lld, ia_mtime=%lld, ia_ctime=%lld\n",
+             attr->ia_valid, attr->ia_mode, attr->ia_uid.val, attr->ia_gid.val, attr->ia_size,
+             attr->ia_atime.tv_sec, attr->ia_mtime.tv_sec, attr->ia_ctime.tv_sec);
+    */
+    return simple_setattr(dentry, attr);
 }
 
 static int piyo_file_getattr(const struct path *path, struct kstat *stat, 
